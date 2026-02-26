@@ -77,7 +77,8 @@ body {
     position: relative;
 }
 
-.nav-link {
+.nav-link,
+.nav-btn {
     color: #333;
     text-decoration: none;
     font-weight: 500;
@@ -89,7 +90,8 @@ body {
     gap: 5px;
 }
 
-.nav-link:hover {
+.nav-link:hover,
+.nav-btn:hover {
     color: #4CAF50;
 }
 
@@ -228,26 +230,50 @@ body {
     display: none;
     flex-direction: column;
     cursor: pointer;
-    gap: 4px;
-    padding: 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+    gap: 5px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #4CAF50;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    z-index: 1001;
+    min-width: 50px;
+    justify-content: center;
+    align-items: center;
 }
 
 .hamburger:hover {
-    background: rgba(0, 0, 0, 0.1);
+    background: #45a049;
+    transform: scale(1.05);
 }
 
 .bar {
-    width: 25px;
+    width: 28px;
     height: 3px;
-    background: #333;
+    background: white;
     transition: 0.3s;
     border-radius: 2px;
 }
 
 .hamburger.active {
-    background: rgba(76, 175, 80, 0.1);
+    background: #4CAF50;
+    box-shadow: 0 2px 12px rgba(76, 175, 80, 0.4);
+}
+
+.hamburger.active .bar {
+    background: white;
+}
+
+.hamburger.active .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger.active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
 }
 
 .container {
@@ -1883,7 +1909,7 @@ body {
 /* 响应式设计 */
 @media (max-width: 768px) {
     .hamburger {
-        display: block;
+        display: block !important;
     }
     
     .nav-menu {
@@ -1894,11 +1920,13 @@ body {
         background-color: rgba(255, 255, 255, 0.98);
         width: 100%;
         text-align: center;
-        transition: 0.3s;
+        transition: 0.3s ease;
         box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
         backdrop-filter: blur(10px);
         padding: 20px 0;
         z-index: 999;
+        height: calc(100vh - 70px);
+        overflow-y: auto;
     }
     
     .nav-menu.active {
@@ -1906,7 +1934,7 @@ body {
     }
     
     .nav-menu li {
-        margin: 10px 0;
+        margin: 5px 0;
         width: 100%;
     }
     
@@ -1917,6 +1945,8 @@ body {
         color: #333;
         text-decoration: none;
         transition: all 0.3s ease;
+        width: 100%;
+        box-sizing: border-box;
     }
     
     .nav-menu .nav-btn:hover {
