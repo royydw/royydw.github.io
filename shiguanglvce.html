@@ -18,26 +18,31 @@
                     <p>探索世界，精彩同行</p>
                 </div>
             </div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
             <div class="nav-menu">
-                <a href="#" class="nav-btn" onclick="showSection('trips')">
+                <a href="#" class="nav-btn" onclick="showSection('trips'); toggleMenu();">
                     <i class="fas fa-map-marked-alt"></i> 我的旅行
                 </a>
-                <a href="#" class="nav-btn" onclick="showSection('planner')">
+                <a href="#" class="nav-btn" onclick="showSection('planner'); toggleMenu();">
                     <i class="fas fa-calendar-alt"></i> 行程规划
                 </a>
-                <a href="#" class="nav-btn" onclick="showSection('budget')">
+                <a href="#" class="nav-btn" onclick="showSection('budget'); toggleMenu();">
                     <i class="fas fa-wallet"></i> 预算管理
                 </a>
-                <a href="#" class="nav-btn" onclick="showSection('checklist')">
+                <a href="#" class="nav-btn" onclick="showSection('checklist'); toggleMenu();">
                     <i class="fas fa-check-square"></i> 旅行清单
                 </a>
-                <a href="#" class="nav-btn" onclick="showSection('documents')">
+                <a href="#" class="nav-btn" onclick="showSection('documents'); toggleMenu();">
                     <i class="fas fa-id-card"></i> 证件管理
                 </a>
-                <a href="#" class="nav-btn" onclick="showSection('memories')">
+                <a href="#" class="nav-btn" onclick="showSection('memories'); toggleMenu();">
                     <i class="fas fa-heart"></i> 旅行回忆
                 </a>
-                <a href="#" class="nav-btn" onclick="showSection('guide')">
+                <a href="#" class="nav-btn" onclick="showSection('guide'); toggleMenu();">
                     <i class="fas fa-book"></i> 攻略整理
                 </a>
             </div>
@@ -746,7 +751,9 @@
             const navBtns = document.querySelectorAll('.nav-btn');
             navBtns.forEach(btn => btn.classList.remove('active'));
 
-            event.target.closest('.nav-btn').classList.add('active');
+            if (event && event.target && event.target.closest('.nav-btn')) {
+                event.target.closest('.nav-btn').classList.add('active');
+            }
 
             // 根据部分执行特定初始化
             if (sectionName === 'planner') {
@@ -754,6 +761,15 @@
             } else if (sectionName === 'budget') {
                 updateBudgetDisplay();
             }
+        }
+
+        // 汉堡菜单切换函数
+        function toggleMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
         }
 
         // 旅行计划相关函数
