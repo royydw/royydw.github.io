@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅行攻略整理与行程规划工具</title>
+    <link rel="stylesheet" href="css/shiguanglvce.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="img/logo.png" alt="Logo" class="logo-img">
+                <div class="nav-title">
+                    <h2>拾光旅册</h2> 
+                    <p>探索世界，精彩同行</p>
+                </div>
+            </div>
+            <div class="nav-menu">
+                <a href="#" class="nav-btn" onclick="showSection('trips')">
+                    <i class="fas fa-map-marked-alt"></i> 我的旅行
+                </a>
+                <a href="#" class="nav-btn" onclick="showSection('planner')">
+                    <i class="fas fa-calendar-alt"></i> 行程规划
+                </a>
+                <a href="#" class="nav-btn" onclick="showSection('budget')">
+                    <i class="fas fa-wallet"></i> 预算管理
+                </a>
+                <a href="#" class="nav-btn" onclick="showSection('checklist')">
+                    <i class="fas fa-check-square"></i> 旅行清单
+                </a>
+                <a href="#" class="nav-btn" onclick="showSection('documents')">
+                    <i class="fas fa-id-card"></i> 证件管理
+                </a>
+                <a href="#" class="nav-btn" onclick="showSection('memories')">
+                    <i class="fas fa-heart"></i> 旅行回忆
+                </a>
+                <a href="#" class="nav-btn" onclick="showSection('guide')">
+                    <i class="fas fa-book"></i> 攻略整理
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <main class="main-content">
+        <!-- 欢迎横幅 -->
+        <section class="welcome-banner">
+            <!-- 轮播图背景 -->
+            <div class="welcome-banner-slider">
+                <div class="welcome-banner-slide active" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('img/图片1.jpg');"></div>
+                <div class="welcome-banner-slide" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('img/图片2.jpg');"></div>
+                <div class="welcome-banner-slide" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('img/图片3.jpg');"></div>
+                <div class="welcome-banner-slide" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('img/图片4.jpg');"></div>
+            </div>
+            
+            <!-- 轮播图指示器 -->
+            <div class="welcome-banner-slider-indicators">
+                <button class="active" onclick="changeSlide(0)"></button>
+                <button onclick="changeSlide(1)"></button>
+                <button onclick="changeSlide(2)"></button>
+                <button onclick="changeSlide(3)"></button>
+            </div>
+            
+            <!-- 前景内容 -->
+            <div class="container">
+                <h1 class="welcome-title">启一段山海序章</h1>
+                <p class="welcome-subtitle">让每程步履都镌成难忘的诗行</p>
+                <button class="btn-primary" onclick="openTripModal()">
+                    <i class="fas fa-plus"></i> 创建新旅行计划
+                </button>
+            </div>
+        </section>
+
+        <!-- 我的旅行计划 -->
+        <section id="trips-section" class="content-section active">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-map-marked-alt"></i> 我的旅行计划
+                </h2>
+                <div class="trips-grid" id="tripsGrid">
+                    <!-- 旅行计划卡片将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 行程规划 -->
+        <section id="planner-section" class="content-section" style="display: none;">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-calendar-alt"></i> 行程规划
+                </h2>
+                <div class="planner-container">
+                    <div class="trip-selector">
+                        <select id="tripSelector" onchange="loadTripItinerary()">
+                            <option value="">选择旅行计划</option>
+                        </select>
+                    </div>
+                    <div class="weather-info" id="weatherInfo">
+                        <!-- 天气信息将通过JavaScript动态生成 -->
+                    </div>
+                    <div class="itinerary-timeline" id="itineraryTimeline">
+                        <!-- 行程时间轴将通过JavaScript动态生成 -->
+                    </div>
+                    <div class="add-activity-form">
+                        <h3>添加新活动</h3>
+                        <form onsubmit="addActivity(event)">
+                            <div class="form-group">
+                                <label>活动时间</label>
+                                <input type="datetime-local" id="activityDateTime" required>
+                            </div>
+                            <div class="form-group">
+                                <label>活动名称</label>
+                                <input type="text" id="activityName" placeholder="例如：参观故宫" required>
+                            </div>
+                            <div class="form-group">
+                                <label>活动地点</label>
+                                <input type="text" id="activityLocation" placeholder="例如：北京市东城区">
+                            </div>
+                            <div class="form-group">
+                                <label>活动类型</label>
+                                <select id="activityType">
+                                    <option value="sightseeing">观光</option>
+                                    <option value="restaurant">美食</option>
+                                    <option value="accommodation">住宿</option>
+                                    <option value="transport">交通</option>
+                                    <option value="shopping">购物</option>
+                                    <option value="entertainment">娱乐</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>备注</label>
+                                <textarea id="activityNotes" placeholder="特殊说明、注意事项等"></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary">添加活动</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 预算管理 -->
+        <section id="budget-section" class="content-section" style="display: none;">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-wallet"></i> 预算管理
+                </h2>
+                <div class="budget-container">
+                    <div class="budget-overview">
+                        <div class="budget-card">
+                            <div class="budget-icon">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="budget-info">
+                                <h3>总预算</h3>
+                                <span class="budget-amount" id="totalBudget">¥0</span>
+                            </div>
+                        </div>
+                        <div class="budget-card">
+                            <div class="budget-icon">
+                                <i class="fas fa-receipt"></i>
+                            </div>
+                            <div class="budget-info">
+                                <h3>已支出</h3>
+                                <span class="budget-amount spent" id="totalSpent">¥0</span>
+                            </div>
+                        </div>
+                        <div class="budget-card">
+                            <div class="budget-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="budget-info">
+                                <h3>剩余预算</h3>
+                                <span class="budget-amount remaining" id="remainingBudget">¥0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="budget-progress">
+                        <div class="progress-header">
+                            <span>预算使用情况</span>
+                            <span id="budgetPercentage">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+                    <div class="expense-form">
+                        <h3>添加支出</h3>
+                        <form onsubmit="addExpense(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>支出类型</label>
+                                    <select id="expenseType">
+                                        <option value="transport">交通</option>
+                                        <option value="accommodation">住宿</option>
+                                        <option value="food">餐饮</option>
+                                        <option value="sightseeing">景点</option>
+                                        <option value="shopping">购物</option>
+                                        <option value="other">其他</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>金额</label>
+                                    <input type="number" id="expenseAmount" step="0.01" placeholder="0.00" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>描述</label>
+                                <input type="text" id="expenseDescription" placeholder="例如：往返机票" required>
+                            </div>
+                            <button type="submit" class="btn-primary">添加支出</button>
+                        </form>
+                    </div>
+                    <div class="expense-list">
+                        <h3>支出明细</h3>
+                        <div class="expense-items" id="expenseItems">
+                            <!-- 支出项目将通过JavaScript动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 旅行清单 -->
+        <section id="checklist-section" class="content-section" style="display: none;">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-check-square"></i> 旅行清单
+                </h2>
+                <div class="checklist-actions">
+                    <button class="btn-primary" onclick="showTemplateLibrary()">
+                        <i class="fas fa-th-large"></i> 模板库
+                    </button>
+                    <button class="btn-secondary" onclick="generateChecklistShareLink()">
+                        <i class="fas fa-share-alt"></i> 分享清单
+                    </button>
+                </div>
+                <div class="checklist-container">
+                    <div class="checklist-categories">
+                        <div class="category-card">
+                            <div class="category-header">
+                                <i class="fas fa-suitcase"></i>
+                                <h3>行李打包</h3>
+                                <span class="category-progress" id="luggageProgress">0/0</span>
+                            </div>
+                            <div class="checklist-items" id="luggageList">
+                                <!-- 行李清单项目 -->
+                            </div>
+                            <form onsubmit="addChecklistItem(event, 'luggage')" class="add-item-form">
+                                <input type="text" placeholder="添加新物品" id="luggageInput">
+                                <button type="submit">添加</button>
+                            </form>
+                        </div>
+                        <div class="category-card">
+                            <div class="category-header">
+                                <i class="fas fa-tasks"></i>
+                                <h3>行前准备</h3>
+                                <span class="category-progress" id="preparationProgress">0/0</span>
+                            </div>
+                            <div class="checklist-items" id="preparationList">
+                                <!-- 行前准备项目 -->
+                            </div>
+                            <form onsubmit="addChecklistItem(event, 'preparation')" class="add-item-form">
+                                <input type="text" placeholder="添加新任务" id="preparationInput">
+                                <button type="submit">添加</button>
+                            </form>
+                        </div>
+                        <div class="category-card">
+                            <div class="category-header">
+                                <i class="fas fa-clipboard-list"></i>
+                                <h3>重要事项</h3>
+                                <span class="category-progress" id="importantProgress">0/0</span>
+                            </div>
+                            <div class="checklist-items" id="importantList">
+                                <!-- 重要事项项目 -->
+                            </div>
+                            <form onsubmit="addChecklistItem(event, 'important')" class="add-item-form">
+                                <input type="text" placeholder="添加重要事项" id="importantInput">
+                                <button type="submit">添加</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 证件管理 -->
+        <section id="documents-section" class="content-section" style="display: none;">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-id-card"></i> 证件管理
+                </h2>
+                <div class="documents-container">
+                    <div class="documents-header">
+                        <div class="documents-stats">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h4>总证件数</h4>
+                                    <span id="totalDocuments">0</span>
+                                </div>
+                            </div>
+                            <div class="stat-card warning">
+                                <div class="stat-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h4>即将到期</h4>
+                                    <span id="expiringDocuments">0</span>
+                                </div>
+                            </div>
+                            <div class="stat-card danger">
+                                <div class="stat-icon">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h4>已过期</h4>
+                                    <span id="expiredDocuments">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="documents-actions">
+                            <button class="btn-primary" onclick="documentManager.showAddDocumentForm()">
+                                <i class="fas fa-plus"></i> 添加证件
+                            </button>
+                        </div>
+                    </div>
+                    <div class="documents-list" id="documentsList">
+                        <!-- 证件列表将通过JavaScript动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 旅行回忆 -->
+        <section id="memories-section" class="content-section" style="display: none;">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-heart"></i> 旅行回忆
+                </h2>
+                <div class="memories-container">
+                    <div class="memories-header">
+                        <div class="memories-stats">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h4>照片总数</h4>
+                                    <span id="totalPhotos">0</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h4>回忆记录</h4>
+                                    <span id="totalMemories">0</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h4>足迹城市</h4>
+                                    <span id="visitedCities">0</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h4>美好回忆</h4>
+                                    <span id="happyMemories">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="memories-actions">
+                            <button class="btn-primary" onclick="memoryManager.showAddMemoryForm()">
+                                <i class="fas fa-plus"></i> 添加回忆
+                            </button>
+                            <label class="btn-secondary" for="photoUploadInput">
+                                <i class="fas fa-upload"></i> 上传照片
+                            </label>
+                            <input type="file" id="photoUploadInput" accept="image/*" multiple style="display: none;" onchange="memoryManager.handlePhotoUpload(event)">
+                        </div>
+                    </div>
+                    
+                    <div class="memories-filters">
+                        <div class="filter-group">
+                            <select id="memoryTripFilter" onchange="memoryManager.filterMemories()">
+                                <option value="">所有旅行</option>
+                            </select>
+                            <select id="memoryMoodFilter" onchange="memoryManager.filterMemories()">
+                                <option value="">所有心情</option>
+                                <option value="happy">😊 开心</option>
+                                <option value="excited">🤩 兴奋</option>
+                                <option value="calm">😌 平静</option>
+                                <option value="nostalgic">😢 怀念</option>
+                                <option value="grateful">🙏 感恩</option>
+                            </select>
+                            <input type="month" id="memoryDateFilter" onchange="memoryManager.filterMemories()">
+                        </div>
+                    </div>
+
+                    <div class="memories-gallery" id="memoriesGallery">
+                        <!-- 回忆卡片将通过JavaScript动态生成 -->
+                    </div>
+                    
+                    <div class="photo-gallery" id="photoGallery" style="display: none;">
+                        <div class="photo-gallery-header">
+                            <h3>照片画廊</h3>
+                            <button class="btn-close" onclick="memoryManager.hidePhotoGallery()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="photos-grid" id="photosGrid">
+                            <!-- 照片网格将通过JavaScript动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 攻略整理 -->
+        <section id="guide-section" class="content-section" style="display: none;">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-book"></i> 攻略整理
+                </h2>
+                <div class="guide-container">
+                    <div class="guide-tabs">
+                        <button class="tab-btn active" onclick="switchGuideTab('destinations')">目的地指南</button>
+                        <button class="tab-btn" onclick="switchGuideTab('tips')">旅行贴士</button>
+                        <button class="tab-btn" onclick="switchGuideTab('emergency')">应急信息</button>
+                    </div>
+                    <div class="guide-content">
+                        <div id="destinations-guide" class="guide-panel active">
+                            <div class="destination-cards">
+                                <div class="destination-card">
+                                    <h4><i class="fas fa-umbrella-beach"></i> 海滩度假</h4>
+                                    <ul>
+                                        <li>防晒用品（防晒霜、太阳镜、帽子）</li>
+                                        <li>泳装和沙滩用品</li>
+                                        <li>防滑拖鞋</li>
+                                        <li>防水袋保护电子设备</li>
+                                    </ul>
+                                </div>
+                                <div class="destination-card">
+                                    <h4><i class="fas fa-mountain"></i> 山地徒步</h4>
+                                    <ul>
+                                        <li>专业的徒步鞋</li>
+                                        <li>登山杖和背包</li>
+                                        <li>保暖衣物</li>
+                                        <li>急救包和地图</li>
+                                    </ul>
+                                </div>
+                                <div class="destination-card">
+                                    <h4><i class="fas fa-city"></i> 城市观光</h4>
+                                    <ul>
+                                        <li>舒适的步行鞋</li>
+                                        <li>相机和充电宝</li>
+                                        <li>城市地图或导航应用</li>
+                                        <li>当地交通卡</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tips-guide" class="guide-panel">
+                            <div class="tips-list">
+                                <div class="tip-card">
+                                    <h4><i class="fas fa-plane"></i> 交通出行</h4>
+                                    <p>提前预订机票和火车票可以获得更好的价格。使用多家比价网站找到最优惠的票价。</p>
+                                </div>
+                                <div class="tip-card">
+                                    <h4><i class="fas fa-bed"></i> 住宿选择</h4>
+                                    <p>选择地理位置便利的住宿，靠近主要景点或交通枢纽。阅读其他游客的评论。</p>
+                                </div>
+                                <div class="tip-card">
+                                    <h4><i class="fas fa-piggy-bank"></i> 预算控制</h4>
+                                    <p>设定每日预算限额，使用记账应用追踪支出。留出10-15%的应急资金。</p>
+                                </div>
+                                <div class="tip-card">
+                                    <h4><i class="fas fa-shield-alt"></i> 安全注意</h4>
+                                    <p>备份重要文件（护照、签证、机票），告知家人你的行程安排，购买旅行保险。</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="emergency-guide" class="guide-panel">
+                            <div class="emergency-info">
+                                <div class="emergency-card">
+                                    <h4><i class="fas fa-phone"></i> 紧急联系方式</h4>
+                                    <ul>
+                                        <li>中国外交部全球领事保护与服务应急热线：+86-10-12308</li>
+                                        <li>报警电话：110</li>
+                                        <li>火警电话：119</li>
+                                        <li>急救电话：120</li>
+                                    </ul>
+                                </div>
+                                <div class="emergency-card">
+                                    <h4><i class="fas fa-file-medical"></i> 医疗急救</h4>
+                                    <ul>
+                                        <li>随身携带常用药品</li>
+                                        <li>了解当地的医院位置</li>
+                                        <li>保存医疗保险信息</li>
+                                        <li>准备基本的急救知识</li>
+                                    </ul>
+                                </div>
+                                <div class="emergency-card">
+                                    <h4><i class="fas fa-id-card"></i> 证件安全</h4>
+                                    <ul>
+                                        <li>将护照信息页拍照保存在手机</li>
+                                        <li>随身携带复印件，原件存放在酒店保险箱</li>
+                                        <li>记下当地中国使领馆联系方式</li>
+                                        <li>及时联系银行报告丢失情况</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 创建旅行计划模态框 -->
+    <div id="tripModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>创建新旅行计划</h3>
+                <span class="close" onclick="closeTripModal()">&times;</span>
+            </div>
+            <form onsubmit="createTrip(event)" class="modal-form">
+                <div class="form-group">
+                    <label>旅行名称</label>
+                    <input type="text" id="tripName" placeholder="例如：北京五日游" required>
+                </div>
+                <div class="form-group">
+                    <label>目的地</label>
+                    <div class="destination-selector">
+                        <select id="provinceSelect" onchange="loadCities()" required>
+                            <option value="">请选择省份/直辖市</option>
+                            <option value="北京市">北京市</option>
+                            <option value="天津市">天津市</option>
+                            <option value="河北省">河北省</option>
+                            <option value="山西省">山西省</option>
+                            <option value="内蒙古自治区">内蒙古自治区</option>
+                            <option value="辽宁省">辽宁省</option>
+                            <option value="吉林省">吉林省</option>
+                            <option value="黑龙江省">黑龙江省</option>
+                            <option value="上海市">上海市</option>
+                            <option value="江苏省">江苏省</option>
+                            <option value="浙江省">浙江省</option>
+                            <option value="安徽省">安徽省</option>
+                            <option value="福建省">福建省</option>
+                            <option value="江西省">江西省</option>
+                            <option value="山东省">山东省</option>
+                            <option value="河南省">河南省</option>
+                            <option value="湖北省">湖北省</option>
+                            <option value="湖南省">湖南省</option>
+                            <option value="广东省">广东省</option>
+                            <option value="广西壮族自治区">广西壮族自治区</option>
+                            <option value="海南省">海南省</option>
+                            <option value="重庆市">重庆市</option>
+                            <option value="四川省">四川省</option>
+                            <option value="贵州省">贵州省</option>
+                            <option value="云南省">云南省</option>
+                            <option value="西藏自治区">西藏自治区</option>
+                            <option value="陕西省">陕西省</option>
+                            <option value="甘肃省">甘肃省</option>
+                            <option value="青海省">青海省</option>
+                            <option value="宁夏回族自治区">宁夏回族自治区</option>
+                            <option value="新疆维吾尔自治区">新疆维吾尔自治区</option>
+                            <option value="香港特别行政区">香港特别行政区</option>
+                            <option value="澳门特别行政区">澳门特别行政区</option>
+                            <option value="台湾省">台湾省</option>
+                        </select>
+                        <select id="citySelect" onchange="updateDestination()" required>
+                            <option value="">请先选择省份</option>
+                        </select>
+                        <input type="hidden" id="tripDestination" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>出发日期</label>
+                        <input type="date" id="tripStartDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>返回日期</label>
+                        <input type="date" id="tripEndDate" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>旅行描述</label>
+                    <textarea id="tripDescription" placeholder="描述这次旅行的亮点和计划"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>预算设置</label>
+                    <input type="number" id="tripBudget" placeholder="预计总费用" step="0.01">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeTripModal()">取消</button>
+                    <button type="submit" class="btn-primary">创建计划</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/models.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/slider.js"></script>
+    <script src="js/budget.js"></script>
+    <script src="js/itinerary.js"></script>
+    <script src="js/checklist.js"></script>
+    <script src="js/weather.js"></script>
+    <script src="js/documents.js"></script>
+    <script src="js/memories.js"></script>
+    <script>
+        // 全局变量
+        let trips = JSON.parse(localStorage.getItem('travelTrips')) || [];
+        let currentTrip = null;
+        let expenses = JSON.parse(localStorage.getItem('travelExpenses')) || [];
+        let checklists = JSON.parse(localStorage.getItem('travelChecklists')) || {
+            luggage: [
+                { id: 1, text: "护照和签证", completed: false },
+                { id: 2, text: "现金和银行卡", completed: false },
+                { id: 3, text: "衣物", completed: false },
+                { id: 4, text: "洗漱用品", completed: false }
+            ],
+            preparation: [
+                { id: 1, text: "购买机票", completed: false },
+                { id: 2, text: "预订酒店", completed: false },
+                { id: 3, text: "办理签证", completed: false },
+                { id: 4, text: "购买保险", completed: false }
+            ],
+            important: [
+                { id: 1, text: "备份重要文件", completed: false },
+                { id: 2, text: "告知家人行程", completed: false },
+                { id: 3, text: "设置手机漫游", completed: false },
+                { id: 4, text: "检查天气预报", completed: false }
+            ]
+        };
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        function initializeApp() {
+            renderTrips();
+            renderChecklists();
+            updateBudgetDisplay();
+            updateTripSelector();
+            initializeSlider();
+            
+            // 初始化管理器
+            if (typeof DataManager !== 'undefined' && typeof ModalManager !== 'undefined') {
+                const dataManager = new DataManager();
+                const modalManager = new ModalManager();
+                weatherManager = new WeatherManager(dataManager, modalManager);
+                documentManager = new DocumentManager(dataManager, modalManager);
+                memoryManager = new MemoryManager(dataManager, modalManager);
+            }
+        }
+
+        // 轮播图功能
+        let currentSlideIndex = 0;
+        let sliderInterval;
+
+        function initializeSlider() {
+            startSlider();
+            
+            // 鼠标悬停时暂停轮播
+            const banner = document.querySelector('.welcome-banner');
+            banner.addEventListener('mouseenter', stopSlider);
+            banner.addEventListener('mouseleave', startSlider);
+        }
+
+        function startSlider() {
+            sliderInterval = setInterval(() => {
+                nextSlide();
+            }, 5000); // 每5秒切换一次
+        }
+
+        function stopSlider() {
+            clearInterval(sliderInterval);
+        }
+
+        function nextSlide() {
+            const slides = document.querySelectorAll('.welcome-banner-slide');
+            const indicators = document.querySelectorAll('.welcome-banner-slider-indicators button');
+            
+            slides[currentSlideIndex].classList.remove('active');
+            indicators[currentSlideIndex].classList.remove('active');
+            
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            
+            slides[currentSlideIndex].classList.add('active');
+            indicators[currentSlideIndex].classList.add('active');
+        }
+
+        function changeSlide(index) {
+            const slides = document.querySelectorAll('.welcome-banner-slide');
+            const indicators = document.querySelectorAll('.welcome-banner-slider-indicators button');
+            
+            // 停止自动轮播
+            stopSlider();
+            
+            // 清除当前活动状态
+            slides[currentSlideIndex].classList.remove('active');
+            indicators[currentSlideIndex].classList.remove('active');
+            
+            // 设置新的活动状态
+            currentSlideIndex = index;
+            slides[currentSlideIndex].classList.add('active');
+            indicators[currentSlideIndex].classList.add('active');
+            
+            // 3秒后重新开始自动轮播
+            setTimeout(() => {
+                startSlider();
+            }, 3000);
+        }
+
+        // 显示指定部分
+        function showSection(sectionName) {
+            // 隐藏所有部分
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // 显示指定部分
+            document.getElementById(sectionName + '-section').style.display = 'block';
+
+            // 更新导航按钮状态
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => btn.classList.remove('active'));
+
+            event.target.closest('.nav-btn').classList.add('active');
+
+            // 根据部分执行特定初始化
+            if (sectionName === 'planner') {
+                updateTripSelector();
+            } else if (sectionName === 'budget') {
+                updateBudgetDisplay();
+            }
+        }
+
+        // 旅行计划相关函数
+        function openTripModal() {
+            // 重置为创建模式
+            currentTrip = null;
+            
+            // 重置模态框标题和按钮文本
+            document.querySelector('#tripModal .modal-header h3').textContent = '创建新旅行计划';
+            document.querySelector('#tripModal .btn-primary').textContent = '创建计划';
+            
+            // 显示模态框
+            document.getElementById('tripModal').style.display = 'block';
+        }
+
+        function closeTripModal() {
+            document.getElementById('tripModal').style.display = 'none';
+            // 清空表单
+            document.getElementById('tripName').value = '';
+            document.getElementById('provinceSelect').value = '';
+            document.getElementById('citySelect').innerHTML = '<option value="">请先选择省份</option>';
+            document.getElementById('citySelect').value = '';
+            document.getElementById('tripDestination').value = '';
+            document.getElementById('tripStartDate').value = '';
+            document.getElementById('tripEndDate').value = '';
+            document.getElementById('tripDescription').value = '';
+            document.getElementById('tripBudget').value = '';
+        }
+
+        function createTrip(event) {
+            event.preventDefault();
+
+            const tripData = {
+                name: document.getElementById('tripName').value,
+                destination: document.getElementById('tripDestination').value,
+                startDate: document.getElementById('tripStartDate').value,
+                endDate: document.getElementById('tripEndDate').value,
+                description: document.getElementById('tripDescription').value,
+                budget: parseFloat(document.getElementById('tripBudget').value) || 0
+            };
+
+            if (currentTrip) {
+                // 编辑模式 - 更新现有旅行计划
+                Object.assign(currentTrip, tripData);
+                localStorage.setItem('travelTrips', JSON.stringify(trips));
+                alert('旅行计划更新成功！');
+            } else {
+                // 创建模式 - 创建新的旅行计划
+                tripData.id = Date.now();
+                tripData.itinerary = [];
+                tripData.createdAt = new Date().toISOString();
+                trips.push(tripData);
+                localStorage.setItem('travelTrips', JSON.stringify(trips));
+                alert('旅行计划创建成功！');
+            }
+            
+            // 重置状态
+            currentTrip = null;
+            
+            closeTripModal();
+            renderTrips();
+            updateTripSelector();
+        }
+
+        // 省份城市数据
+        const cityData = {
+            "北京市": ["东城区", "西城区", "朝阳区", "丰台区", "石景山区", "海淀区", "门头沟区", "房山区", "通州区", "顺义区", "昌平区", "大兴区", "怀柔区", "平谷区", "密云区", "延庆区"],
+            "天津市": ["和平区", "河东区", "河西区", "南开区", "河北区", "红桥区", "东丽区", "西青区", "津南区", "北辰区", "武清区", "宝坻区", "滨海新区", "宁河区", "静海区", "蓟州区"],
+            "河北省": ["石家庄市", "唐山市", "秦皇岛市", "邯郸市", "邢台市", "保定市", "张家口市", "承德市", "沧州市", "廊坊市", "衡水市"],
+            "山西省": ["太原市", "大同市", "阳泉市", "长治市", "晋城市", "朔州市", "晋中市", "运城市", "忻州市", "临汾市", "吕梁市"],
+            "内蒙古自治区": ["呼和浩特市", "包头市", "乌海市", "赤峰市", "通辽市", "鄂尔多斯市", "呼伦贝尔市", "巴彦淖尔市", "乌兰察布市", "兴安盟", "锡林郭勒盟", "阿拉善盟"],
+            "辽宁省": ["沈阳市", "大连市", "鞍山市", "抚顺市", "本溪市", "丹东市", "锦州市", "营口市", "阜新市", "辽阳市", "盘锦市", "铁岭市", "朝阳市", "葫芦岛市"],
+            "吉林省": ["长春市", "吉林市", "四平市", "辽源市", "通化市", "白山市", "松原市", "白城市", "延边朝鲜族自治州"],
+            "黑龙江省": ["哈尔滨市", "齐齐哈尔市", "鸡西市", "鹤岗市", "双鸭山市", "大庆市", "伊春市", "佳木斯市", "七台河市", "牡丹江市", "黑河市", "绥化市", "大兴安岭地区"],
+            "上海市": ["黄浦区", "徐汇区", "长宁区", "静安区", "普陀区", "虹口区", "杨浦区", "闵行区", "宝山区", "嘉定区", "浦东新区", "金山区", "松江区", "青浦区", "奉贤区", "崇明区"],
+            "江苏省": ["南京市", "无锡市", "徐州市", "常州市", "苏州市", "南通市", "连云港市", "淮安市", "盐城市", "扬州市", "镇江市", "泰州市", "宿迁市"],
+            "浙江省": ["杭州市", "宁波市", "温州市", "嘉兴市", "湖州市", "绍兴市", "金华市", "衢州市", "舟山市", "台州市", "丽水市"],
+            "安徽省": ["合肥市", "芜湖市", "蚌埠市", "淮南市", "马鞍山市", "淮北市", "铜陵市", "安庆市", "黄山市", "滁州市", "阜阳市", "宿州市", "六安市", "亳州市", "池州市", "宣城市"],
+            "福建省": ["福州市", "厦门市", "莆田市", "三明市", "泉州市", "漳州市", "南平市", "龙岩市", "宁德市"],
+            "江西省": ["南昌市", "景德镇市", "萍乡市", "九江市", "新余市", "鹰潭市", "赣州市", "吉安市", "宜春市", "抚州市", "上饶市"],
+            "山东省": ["济南市", "青岛市", "淄博市", "枣庄市", "东营市", "烟台市", "潍坊市", "济宁市", "泰安市", "威海市", "日照市", "临沂市", "德州市", "聊城市", "滨州市", "菏泽市"],
+            "河南省": ["郑州市", "开封市", "洛阳市", "平顶山市", "安阳市", "鹤壁市", "新乡市", "焦作市", "濮阳市", "许昌市", "漯河市", "三门峡市", "南阳市", "商丘市", "信阳市", "周口市", "驻马店市", "济源市"],
+            "湖北省": ["武汉市", "黄石市", "十堰市", "宜昌市", "襄阳市", "鄂州市", "荆门市", "孝感市", "荆州市", "黄冈市", "咸宁市", "随州市", "恩施土家族苗族自治州", "仙桃市", "潜江市", "天门市", "神农架林区"],
+            "湖南省": ["长沙市", "株洲市", "湘潭市", "衡阳市", "邵阳市", "岳阳市", "常德市", "张家界市", "益阳市", "郴州市", "永州市", "怀化市", "娄底市", "湘西土家族苗族自治州"],
+            "广东省": ["广州市", "韶关市", "深圳市", "珠海市", "汕头市", "佛山市", "江门市", "湛江市", "茂名市", "肇庆市", "惠州市", "梅州市", "汕尾市", "河源市", "阳江市", "清远市", "东莞市", "中山市", "潮州市", "揭阳市", "云浮市"],
+            "广西壮族自治区": ["南宁市", "柳州市", "桂林市", "梧州市", "北海市", "防城港市", "钦州市", "贵港市", "玉林市", "百色市", "贺州市", "河池市", "来宾市", "崇左市"],
+            "海南省": ["海口市", "三亚市", "三沙市", "儋州市", "五指山市", "琼海市", "文昌市", "万宁市", "东方市", "定安县", "屯昌县", "澄迈县", "临高县", "白沙黎族自治县", "昌江黎族自治县", "乐东黎族自治县", "陵水黎族自治县", "保亭黎族苗族自治县", "琼中黎族苗族自治县"],
+            "重庆市": ["万州区", "涪陵区", "渝中区", "大渡口区", "江北区", "沙坪坝区", "九龙坡区", "南岸区", "北碚区", "綦江区", "大足区", "渝北区", "巴南区", "黔江区", "长寿区", "江津区", "合川区", "永川区", "南川区", "璧山区", "铜梁区", "潼南区", "荣昌区", "开州区", "梁平区", "武隆区", "城口县", "丰都县", "垫江县", "忠县", "云阳县", "奉节县", "巫山县", "巫溪县", "石柱土家族自治县", "秀山土家族苗族自治县", "酉阳土家族苗族自治县", "彭水苗族土家族自治县"],
+            "四川省": ["成都市", "自贡市", "攀枝花市", "泸州市", "德阳市", "绵阳市", "广元市", "遂宁市", "内江市", "乐山市", "南充市", "眉山市", "宜宾市", "广安市", "达州市", "雅安市", "巴中市", "资阳市", "阿坝藏族羌族自治州", "甘孜藏族自治州", "凉山彝族自治州"],
+            "贵州省": ["贵阳市", "六盘水市", "遵义市", "安顺市", "毕节市", "铜仁市", "黔西南布依族苗族自治州", "黔东南苗族侗族自治州", "黔南布依族苗族自治州"],
+            "云南省": ["昆明市", "曲靖市", "玉溪市", "保山市", "昭通市", "丽江市", "普洱市", "临沧市", "楚雄彝族自治州", "红河哈尼族彝族自治州", "文山壮族苗族自治州", "西双版纳傣族自治州", "大理白族自治州", "德宏傣族景颇族自治州", "怒江傈僳族自治州", "迪庆藏族自治州"],
+            "西藏自治区": ["拉萨市", "日喀则市", "昌都市", "林芝市", "山南市", "那曲市", "阿里地区"],
+            "陕西省": ["西安市", "铜川市", "宝鸡市", "咸阳市", "渭南市", "延安市", "汉中市", "榆林市", "安康市", "商洛市"],
+            "甘肃省": ["兰州市", "嘉峪关市", "金昌市", "白银市", "天水市", "武威市", "张掖市", "平凉市", "酒泉市", "庆阳市", "定西市", "陇南市", "临夏回族自治州", "甘南藏族自治州"],
+            "青海省": ["西宁市", "海东市", "海北藏族自治州", "黄南藏族自治州", "海南藏族自治州", "果洛藏族自治州", "玉树藏族自治州", "海西蒙古族藏族自治州"],
+            "宁夏回族自治区": ["银川市", "石嘴山市", "吴忠市", "固原市", "中卫市"],
+            "新疆维吾尔自治区": ["乌鲁木齐市", "克拉玛依市", "吐鲁番市", "哈密市", "昌吉回族自治州", "博尔塔拉蒙古自治州", "巴音郭楞蒙古自治州", "阿克苏地区", "克孜勒苏柯尔克孜自治州", "喀什地区", "和田地区", "伊犁哈萨克自治州", "塔城地区", "阿勒泰地区"],
+            "香港特别行政区": ["中西区", "湾仔区", "铜锣湾区", "北区", "大埔区", "沙田区", "西贡区", "葵青区", "荃湾区", "屯门区", "元朗区", "九龙城区", "油尖旺区", "深水埗区", "九龙塘区", "观塘区", "荃湾区", "屯门区", "元朗区", "北区", "大埔区", "沙田区", "西贡区", "葵青区"],
+            "澳门特别行政区": ["澳门半岛", "氹仔", "路环"],
+            "台湾省": ["台北市", "新北市", "桃园市", "台中市", "台南市", "高雄市", "基隆市", "新竹市", "嘉义市", "新竹县", "苗栗县", "彰化县", "南投县", "云林县", "嘉义县", "屏东县", "宜兰县", "花莲县", "台东县", "澎湖县", "金门县", "连江县"]
+        };
+
+        function loadCities() {
+            const provinceSelect = document.getElementById('provinceSelect');
+            const citySelect = document.getElementById('citySelect');
+            const selectedProvince = provinceSelect.value;
+
+            // 清空城市选择
+            citySelect.innerHTML = '<option value="">请选择城市</option>';
+
+            if (selectedProvince && cityData[selectedProvince]) {
+                const cities = cityData[selectedProvince];
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+
+                // 对于直辖市，直接设置城市
+                if (['北京市', '上海市', '天津市', '重庆市', '香港特别行政区', '澳门特别行政区'].includes(selectedProvince)) {
+                    citySelect.value = selectedProvince;
+                    document.getElementById('tripDestination').value = selectedProvince;
+                }
+            }
+        }
+
+        function updateDestination() {
+            const provinceSelect = document.getElementById('provinceSelect');
+            const citySelect = document.getElementById('citySelect');
+            const destinationInput = document.getElementById('tripDestination');
+
+            if (provinceSelect.value && citySelect.value) {
+                // 对于直辖市，只返回省份名称
+                if (['北京市', '上海市', '天津市', '重庆市', '香港特别行政区', '澳门特别行政区'].includes(provinceSelect.value)) {
+                    destinationInput.value = provinceSelect.value;
+                } else {
+                    destinationInput.value = citySelect.value;
+                }
+            }
+        }
+
+        function editTrip(tripId) {
+            const trip = trips.find(t => t.id === tripId);
+            if (!trip) return;
+
+            currentTrip = trip;
+            
+            // 填充表单
+            document.getElementById('tripName').value = trip.name;
+            document.getElementById('tripStartDate').value = trip.startDate;
+            document.getElementById('tripEndDate').value = trip.endDate;
+            document.getElementById('tripDescription').value = trip.description || '';
+            document.getElementById('tripBudget').value = trip.budget || '';
+
+            // 处理目的地 - 先尝试找到对应的省份和城市
+            const destination = trip.destination;
+            let foundProvince = '';
+            let foundCity = '';
+
+            // 遍历省份数据找到匹配
+            for (const [province, cities] of Object.entries(cityData)) {
+                if (province === destination) {
+                    foundProvince = province;
+                    foundCity = destination;
+                    break;
+                }
+                if (cities.includes(destination)) {
+                    foundProvince = province;
+                    foundCity = destination;
+                    break;
+                }
+            }
+
+            if (foundProvince) {
+                document.getElementById('provinceSelect').value = foundProvince;
+                loadCities(); // 加载对应城市
+                
+                // 如果是直辖市，设置省份为城市
+                if (['北京市', '上海市', '天津市', '重庆市', '香港特别行政区', '澳门特别行政区'].includes(foundProvince)) {
+                    document.getElementById('citySelect').value = foundProvince;
+                } else {
+                    document.getElementById('citySelect').value = foundCity;
+                }
+                
+                updateDestination(); // 更新隐藏字段
+            }
+
+            // 更新模态框标题和按钮文本
+            document.querySelector('#tripModal .modal-header h3').textContent = '编辑旅行计划';
+            document.querySelector('#tripModal .btn-primary').textContent = '更新计划';
+
+            // 显示模态框
+            document.getElementById('tripModal').style.display = 'block';
+        }
+
+        function renderTrips() {
+            const tripsGrid = document.getElementById('tripsGrid');
+            
+            if (trips.length === 0) {
+                tripsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <h3>还没有旅行计划</h3>
+                        <p>创建你的第一个旅行计划，开始精彩旅程吧！</p>
+                        <button class="btn-primary" onclick="openTripModal()">
+                            <i class="fas fa-plus"></i> 创建旅行计划
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            tripsGrid.innerHTML = trips.map(trip => {
+                const days = calculateTripDays(trip.startDate, trip.endDate);
+                return `
+                    <div class="trip-card">
+                        <div class="trip-header">
+                            <h3>${trip.name}</h3>
+                            <div class="trip-actions">
+                                <button onclick="editTrip(${trip.id})" class="btn-icon">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="deleteTrip(${trip.id})" class="btn-icon delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="trip-info">
+                            <div class="trip-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>${trip.destination}</span>
+                            </div>
+                            <div class="trip-detail">
+                                <i class="fas fa-calendar"></i>
+                                <span>${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}</span>
+                            </div>
+                            <div class="trip-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>${days}天</span>
+                            </div>
+                            <div class="trip-detail">
+                                <i class="fas fa-money-bill"></i>
+                                <span>预算：¥${trip.budget.toLocaleString()}</span>
+                            </div>
+                        </div>
+                        <div class="trip-description">
+                            <p>${trip.description || '暂无描述'}</p>
+                        </div>
+                        <div class="trip-footer">
+                            <button class="btn-primary" onclick="openPlanner(${trip.id})">
+                                <i class="fas fa-calendar-alt"></i> 规划行程
+                            </button>
+                            <button class="btn-secondary" onclick="openBudget(${trip.id})">
+                                <i class="fas fa-wallet"></i> 管理预算
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function calculateTripDays(startDate, endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const timeDiff = end.getTime() - start.getTime();
+            return Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('zh-CN');
+        }
+
+        function deleteTrip(tripId) {
+            if (confirm('确定要删除这个旅行计划吗？此操作不可恢复。')) {
+                trips = trips.filter(trip => trip.id !== tripId);
+                localStorage.setItem('travelTrips', JSON.stringify(trips));
+                renderTrips();
+                updateTripSelector();
+            }
+        }
+
+        function openPlanner(tripId) {
+            currentTrip = trips.find(trip => trip.id === tripId);
+            showSection('planner');
+        }
+
+        function openBudget(tripId) {
+            currentTrip = trips.find(trip => trip.id === tripId);
+            showSection('budget');
+        }
+
+        // 行程规划相关函数
+        function updateTripSelector() {
+            const selector = document.getElementById('tripSelector');
+            if (!selector) return;
+
+            const currentValue = selector.value;
+            selector.innerHTML = '<option value="">选择旅行计划</option>' +
+                trips.map(trip => `<option value="${trip.id}">${trip.name} - ${trip.destination}</option>`).join('');
+            
+            if (currentValue && trips.find(trip => trip.id == currentValue)) {
+                selector.value = currentValue;
+            }
+        }
+
+        function loadTripItinerary() {
+            const tripId = document.getElementById('tripSelector').value;
+            if (!tripId) {
+                document.getElementById('itineraryTimeline').innerHTML = '<p class="empty-message">请选择一个旅行计划</p>';
+                return;
+            }
+
+            currentTrip = trips.find(trip => trip.id == tripId);
+            renderItinerary();
+            
+            // 显示目的地天气信息
+            if (currentTrip && weatherManager) {
+                weatherManager.displayWeatherInPlanner(currentTrip.destination, currentTrip.startDate);
+            }
+        }
+
+        function renderItinerary() {
+            const timeline = document.getElementById('itineraryTimeline');
+            
+            if (!currentTrip || currentTrip.itinerary.length === 0) {
+                timeline.innerHTML = `
+                    <div class="empty-timeline">
+                        <i class="fas fa-calendar-plus"></i>
+                        <h4>还没有安排行程</h4>
+                        <p>添加你的第一个活动，开始规划精彩旅程！</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const sortedItinerary = currentTrip.itinerary.sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
+            
+            timeline.innerHTML = sortedItinerary.map(activity => `
+                <div class="timeline-item">
+                    <div class="timeline-time">
+                        <span class="time">${formatDateTime(activity.dateTime)}</span>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="activity-card">
+                            <div class="activity-header">
+                                <h4>${activity.name}</h4>
+                                <div class="activity-actions">
+                                    <button onclick="editActivity(${activity.id})" class="btn-icon">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button onclick="deleteActivity(${activity.id})" class="btn-icon delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="activity-info">
+                                <span class="activity-type">
+                                    <i class="fas ${getActivityIcon(activity.type)}"></i>
+                                    ${getActivityTypeName(activity.type)}
+                                </span>
+                                ${activity.location ? `<span class="activity-location"><i class="fas fa-map-marker-alt"></i> ${activity.location}</span>` : ''}
+                                <button onclick="showActivityWeather('${activity.location}', '${activity.dateTime}', ${JSON.stringify(activity).replace(/'/g, "\\'")})" class="weather-btn">
+                                    <i class="fas fa-cloud-sun"></i> 查看天气
+                                </button>
+                            </div>
+                            <div class="activity-weather" id="weather-${activity.id}">
+                                <!-- 天气信息将动态加载 -->
+                            </div>
+                            ${activity.notes ? `<div class="activity-notes">${activity.notes}</div>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatDateTime(dateTimeString) {
+            const date = new Date(dateTimeString);
+            const dateStr = date.toLocaleDateString('zh-CN');
+            const timeStr = date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+            return `${dateStr} ${timeStr}`;
+        }
+
+        function getActivityIcon(type) {
+            const icons = {
+                sightseeing: 'fa-camera',
+                restaurant: 'fa-utensils',
+                accommodation: 'fa-bed',
+                transport: 'fa-car',
+                shopping: 'fa-shopping-bag',
+                entertainment: 'fa-music'
+            };
+            return icons[type] || 'fa-star';
+        }
+
+        function getActivityTypeName(type) {
+            const names = {
+                sightseeing: '观光',
+                restaurant: '美食',
+                accommodation: '住宿',
+                transport: '交通',
+                shopping: '购物',
+                entertainment: '娱乐'
+            };
+            return names[type] || '活动';
+        }
+
+        // 天气相关函数
+        async function showActivityWeather(location, dateTime, activityData) {
+            if (!weatherManager || !location) {
+                alert('无法获取天气信息');
+                return;
+            }
+
+            try {
+                const date = new Date(dateTime).toISOString().split('T')[0];
+                const weather = await weatherManager.getWeather(location, date);
+                
+                if (weather) {
+                    weatherManager.showWeatherSuggestions(activityData, weather);
+                } else {
+                    alert('无法获取该地区的天气信息');
+                }
+            } catch (error) {
+                console.error('获取天气信息失败:', error);
+                alert('获取天气信息失败，请稍后重试');
+            }
+        }
+
+        function addActivity(event) {
+            event.preventDefault();
+            
+            if (!currentTrip) {
+                alert('请先选择一个旅行计划');
+                return;
+            }
+
+            const activity = {
+                id: Date.now(),
+                dateTime: document.getElementById('activityDateTime').value,
+                name: document.getElementById('activityName').value,
+                location: document.getElementById('activityLocation').value,
+                type: document.getElementById('activityType').value,
+                notes: document.getElementById('activityNotes').value
+            };
+
+            if (!currentTrip.itinerary) {
+                currentTrip.itinerary = [];
+            }
+
+            currentTrip.itinerary.push(activity);
+            
+            // 更新本地存储
+            const tripIndex = trips.findIndex(trip => trip.id === currentTrip.id);
+            if (tripIndex !== -1) {
+                trips[tripIndex] = currentTrip;
+                localStorage.setItem('travelTrips', JSON.stringify(trips));
+            }
+
+            // 清空表单
+            event.target.reset();
+            
+            renderItinerary();
+            alert('活动添加成功！');
+        }
+
+        function deleteActivity(activityId) {
+            if (confirm('确定要删除这个活动吗？')) {
+                currentTrip.itinerary = currentTrip.itinerary.filter(activity => activity.id !== activityId);
+                
+                // 更新本地存储
+                const tripIndex = trips.findIndex(trip => trip.id === currentTrip.id);
+                if (tripIndex !== -1) {
+                    trips[tripIndex] = currentTrip;
+                    localStorage.setItem('travelTrips', JSON.stringify(trips));
+                }
+                
+                renderItinerary();
+            }
+        }
+
+        // 预算管理相关函数
+        function updateBudgetDisplay() {
+            if (!currentTrip) return;
+
+            const tripExpenses = expenses.filter(expense => expense.tripId === currentTrip.id);
+            const totalBudget = currentTrip.budget || 0;
+            const totalSpent = tripExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+            const remaining = totalBudget - totalSpent;
+
+            document.getElementById('totalBudget').textContent = `¥${totalBudget.toLocaleString()}`;
+            document.getElementById('totalSpent').textContent = `¥${totalSpent.toLocaleString()}`;
+            document.getElementById('remainingBudget').textContent = `¥${remaining.toLocaleString()}`;
+
+            const percentage = totalBudget > 0 ? Math.round((totalSpent / totalBudget) * 100) : 0;
+            document.getElementById('budgetPercentage').textContent = `${percentage}%`;
+            
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = `${Math.min(percentage, 100)}%`;
+            progressFill.style.backgroundColor = percentage > 90 ? '#f44336' : percentage > 75 ? '#ff9800' : '#4CAF50';
+
+            renderExpenses();
+        }
+
+        function addExpense(event) {
+            event.preventDefault();
+            
+            if (!currentTrip) {
+                alert('请先选择一个旅行计划');
+                return;
+            }
+
+            const expense = {
+                id: Date.now(),
+                tripId: currentTrip.id,
+                type: document.getElementById('expenseType').value,
+                amount: parseFloat(document.getElementById('expenseAmount').value),
+                description: document.getElementById('expenseDescription').value,
+                date: new Date().toISOString()
+            };
+
+            expenses.push(expense);
+            localStorage.setItem('travelExpenses', JSON.stringify(expenses));
+            
+            // 清空表单
+            event.target.reset();
+            
+            updateBudgetDisplay();
+            alert('支出添加成功！');
+        }
+
+        function renderExpenses() {
+            const expenseItems = document.getElementById('expenseItems');
+            if (!currentTrip) {
+                expenseItems.innerHTML = '<p class="empty-message">请先选择一个旅行计划</p>';
+                return;
+            }
+
+            const tripExpenses = expenses.filter(expense => expense.tripId === currentTrip.id);
+            
+            if (tripExpenses.length === 0) {
+                expenseItems.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-receipt"></i>
+                        <p>还没有支出记录</p>
+                    </div>
+                `;
+                return;
+            }
+
+            expenseItems.innerHTML = tripExpenses.map(expense => `
+                <div class="expense-item">
+                    <div class="expense-info">
+                        <div class="expense-type">
+                            <i class="fas ${getExpenseIcon(expense.type)}"></i>
+                            <span>${getExpenseTypeName(expense.type)}</span>
+                        </div>
+                        <div class="expense-description">${expense.description}</div>
+                    </div>
+                    <div class="expense-amount">¥${expense.amount.toLocaleString()}</div>
+                    <button onclick="deleteExpense(${expense.id})" class="btn-icon delete">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function getExpenseIcon(type) {
+            const icons = {
+                transport: 'fa-car',
+                accommodation: 'fa-bed',
+                food: 'fa-utensils',
+                sightseeing: 'fa-camera',
+                shopping: 'fa-shopping-bag',
+                other: 'fa-ellipsis-h'
+            };
+            return icons[type] || 'fa-star';
+        }
+
+        function getExpenseTypeName(type) {
+            const names = {
+                transport: '交通',
+                accommodation: '住宿',
+                food: '餐饮',
+                sightseeing: '景点',
+                shopping: '购物',
+                other: '其他'
+            };
+            return names[type] || '支出';
+        }
+
+        function deleteExpense(expenseId) {
+            if (confirm('确定要删除这个支出记录吗？')) {
+                expenses = expenses.filter(expense => expense.id !== expenseId);
+                localStorage.setItem('travelExpenses', JSON.stringify(expenses));
+                updateBudgetDisplay();
+            }
+        }
+
+        // 旅行清单相关函数
+        function renderChecklists() {
+            Object.keys(checklists).forEach(category => {
+                const container = document.getElementById(category + 'List');
+                if (!container) return;
+
+                container.innerHTML = checklists[category].map(item => `
+                    <div class="checklist-item ${item.completed ? 'completed' : ''}">
+                        <label class="checkbox-label">
+                            <input type="checkbox" ${item.completed ? 'checked' : ''} 
+                                   onchange="toggleChecklistItem('${category}', ${item.id})">
+                            <span class="checkmark"></span>
+                            <span class="item-text">${item.text}</span>
+                        </label>
+                        <button onclick="deleteChecklistItem('${category}', ${item.id})" class="btn-icon delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `).join('');
+            });
+        }
+
+        function addChecklistItem(event, category) {
+            event.preventDefault();
+            const input = document.getElementById(category + 'Input');
+            const text = input.value.trim();
+            
+            if (text) {
+                const newItem = {
+                    id: Date.now(),
+                    text: text,
+                    completed: false
+                };
+                
+                checklists[category].push(newItem);
+                localStorage.setItem('travelChecklists', JSON.stringify(checklists));
+                input.value = '';
+                renderChecklists();
+            }
+        }
+
+        function toggleChecklistItem(category, itemId) {
+            const item = checklists[category].find(item => item.id === itemId);
+            if (item) {
+                item.completed = !item.completed;
+                localStorage.setItem('travelChecklists', JSON.stringify(checklists));
+                renderChecklists();
+            }
+        }
+
+        function deleteChecklistItem(category, itemId) {
+            if (confirm('确定要删除这个项目吗？')) {
+                checklists[category] = checklists[category].filter(item => item.id !== itemId);
+                localStorage.setItem('travelChecklists', JSON.stringify(checklists));
+                renderChecklists();
+            }
+        }
+
+        // 攻略整理相关函数
+        function switchGuideTab(tabName) {
+            // 更新标签页状态
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // 显示对应内容
+            document.querySelectorAll('.guide-panel').forEach(panel => panel.classList.remove('active'));
+            document.getElementById(tabName + '-guide').classList.add('active');
+        }
+
+        // 窗口点击关闭模态框
+        window.onclick = function(event) {
+            const modal = document.getElementById('tripModal');
+            if (event.target === modal) {
+                closeTripModal();
+            }
+        }
+    </script>
+</body>
+</html>
