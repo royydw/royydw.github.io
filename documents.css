@@ -1,0 +1,113 @@
+/* ============================================
+   证件管理模块样式 - 照片上传功能
+   ============================================ */
+
+/* 证件照片上传区域 */
+.document-photo-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    border: 2px dashed var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--bg-tertiary);
+    transition: all var(--transition-normal);
+}
+
+.document-photo-upload:hover {
+    border-color: #667eea;
+    background: rgba(102, 126, 234, 0.05);
+}
+
+/* 照片上传按钮 */
+.photo-upload-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all var(--transition-normal);
+}
+
+.photo-upload-btn:hover {
+    color: #667eea;
+}
+
+.photo-upload-btn i {
+    font-size: 2rem;
+}
+
+.photo-upload-btn span {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* 照片预览 */
+.document-photo-preview {
+    max-width: 200px;
+    max-height: 150px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    object-fit: cover;
+}
+
+/* 证件卡片中的照片容器 */
+.document-photo-container {
+    margin: var(--spacing-md) 0;
+    text-align: center;
+}
+
+.document-photo {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    object-fit: cover;
+}
+
+.document-photo:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-lg);
+}
+
+/* 照片查看器 */
+.document-photo-viewer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-lg);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-lg);
+}
+
+.photo-fullsize {
+    max-width: 100%;
+    max-height: 70vh;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-xl);
+}
+
+/* 表单提示文字 */
+.form-hint {
+    display: block;
+    margin-top: var(--spacing-xs);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .document-photo-preview {
+        max-width: 150px;
+        max-height: 100px;
+    }
+    
+    .document-photo {
+        max-height: 150px;
+    }
+}

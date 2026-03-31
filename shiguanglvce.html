@@ -6,7 +6,15 @@
     <title>旅行攻略整理与行程规划工具</title>
     <link rel="stylesheet" href="css/shiguanglvce.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/documents.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- JavaScript 文件 -->
+    <script src="js/storage.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/weather.js"></script>
+    <script src="js/documents.js"></script>
+    <script src="js/memories.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -22,7 +30,6 @@
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
-                <span class="menu-text">菜单</span>
             </div>
             <div class="nav-menu">
                 <li>
@@ -409,7 +416,7 @@
                             <label class="btn-secondary" for="photoUploadInput">
                                 <i class="fas fa-upload"></i> 上传照片
                             </label>
-                            <input type="file" id="photoUploadInput" accept="image/*" multiple style="display: none;" onchange="memoryManager.handlePhotoUpload(event)">
+                            <input type="file" id="photoUploadInput" accept="image/*" multiple style="display: none;" onchange="memoryManager.handlePhotoUpload(event)" data-memory-id="" data-trip-id="">
                         </div>
                     </div>
                     
@@ -650,6 +657,80 @@
         let trips = JSON.parse(localStorage.getItem('travelTrips')) || [];
         let currentTrip = null;
         let expenses = JSON.parse(localStorage.getItem('travelExpenses')) || [];
+        
+        // 推荐游玩地点数据
+        const recommendedPlaces = {
+            "北京市": [
+                { name: "故宫博物院", description: "中国明清两代的皇家宫殿", budget: 60, time: "3-4小时" },
+                { name: "长城", description: "中国古代伟大的防御工程", budget: 100, time: "4-5小时" },
+                { name: "颐和园", description: "中国古典园林", budget: 30, time: "2-3小时" },
+                { name: "天坛", description: "明清皇帝祭天的场所", budget: 34, time: "2小时" },
+                { name: "天安门广场", description: "世界最大的城市广场", budget: 0, time: "1小时" }
+            ],
+            "上海市": [
+                { name: "外滩", description: "上海的标志性景观", budget: 0, time: "1-2小时" },
+                { name: "东方明珠", description: "上海的地标建筑", budget: 120, time: "2-3小时" },
+                { name: "豫园", description: "上海的古典园林", budget: 40, time: "1-2小时" },
+                { name: "迪士尼乐园", description: "世界级主题公园", budget: 399, time: "1天" },
+                { name: "南京路", description: "上海的商业中心", budget: 0, time: "2-3小时" }
+            ],
+            "广州市": [
+                { name: "广州塔", description: "广州的地标建筑", budget: 150, time: "2-3小时" },
+                { name: "陈家祠", description: "广东民间工艺博物馆", budget: 10, time: "1-2小时" },
+                { name: "越秀公园", description: "广州最大的城市公园", budget: 0, time: "2-3小时" },
+                { name: "沙面", description: "广州的欧式建筑群", budget: 0, time: "1-2小时" },
+                { name: "北京路", description: "广州的商业步行街", budget: 0, time: "2-3小时" }
+            ],
+            "深圳市": [
+                { name: "世界之窗", description: "世界名胜微缩景观", budget: 200, time: "4-5小时" },
+                { name: "东部华侨城", description: "大型主题公园", budget: 180, time: "1天" },
+                { name: "深圳湾公园", description: "深圳的海滨公园", budget: 0, time: "2-3小时" },
+                { name: "中英街", description: "深圳与香港的边界", budget: 0, time: "1-2小时" },
+                { name: "莲花山公园", description: "深圳的城市公园", budget: 0, time: "2-3小时" }
+            ],
+            "成都市": [
+                { name: "大熊猫繁育研究基地", description: "观看大熊猫的最佳地点", budget: 58, time: "3-4小时" },
+                { name: "武侯祠", description: "纪念诸葛亮的祠堂", budget: 50, time: "2小时" },
+                { name: "锦里", description: "成都的历史文化街区", budget: 0, time: "2-3小时" },
+                { name: "宽窄巷子", description: "成都的传统街巷", budget: 0, time: "2-3小时" },
+                { name: "都江堰", description: "古代水利工程", budget: 80, time: "4-5小时" }
+            ],
+            "杭州市": [
+                { name: "西湖", description: "杭州的标志性景观", budget: 0, time: "3-4小时" },
+                { name: "灵隐寺", description: "杭州的千年古刹", budget: 30, time: "2-3小时" },
+                { name: "千岛湖", description: "著名的人工湖", budget: 130, time: "1天" },
+                { name: "宋城", description: "宋代主题公园", budget: 310, time: "4-5小时" },
+                { name: "西溪湿地", description: "杭州的湿地公园", budget: 80, time: "3-4小时" }
+            ],
+            "武汉市": [
+                { name: "黄鹤楼", description: "武汉的标志性建筑", budget: 70, time: "2-3小时" },
+                { name: "东湖", description: "武汉的城市湖泊", budget: 0, time: "3-4小时" },
+                { name: "武汉大学", description: "中国著名高校", budget: 0, time: "2-3小时" },
+                { name: "户部巷", description: "武汉的美食街", budget: 0, time: "1-2小时" },
+                { name: "长江大桥", description: "武汉的标志性桥梁", budget: 0, time: "1-2小时" }
+            ],
+            "西安市": [
+                { name: "兵马俑", description: "世界第八大奇迹", budget: 120, time: "3-4小时" },
+                { name: "大雁塔", description: "西安的标志性建筑", budget: 50, time: "2-3小时" },
+                { name: "古城墙", description: "西安的明代城墙", budget: 54, time: "2-3小时" },
+                { name: "回民街", description: "西安的美食街", budget: 0, time: "2-3小时" },
+                { name: "华清宫", description: "唐代皇家温泉", budget: 120, time: "3-4小时" }
+            ],
+            "重庆市": [
+                { name: "洪崖洞", description: "重庆的吊脚楼建筑群", budget: 0, time: "2-3小时" },
+                { name: "解放碑", description: "重庆的商业中心", budget: 0, time: "1-2小时" },
+                { name: "长江索道", description: "重庆的特色交通", budget: 30, time: "30分钟" },
+                { name: "磁器口", description: "重庆的历史文化街区", budget: 0, time: "2-3小时" },
+                { name: "武隆天坑", description: "重庆的自然景观", budget: 135, time: "1天" }
+            ],
+            "南京市": [
+                { name: "中山陵", description: "孙中山先生的陵墓", budget: 0, time: "3-4小时" },
+                { name: "夫子庙", description: "南京的历史文化街区", budget: 0, time: "2-3小时" },
+                { name: "明孝陵", description: "明代皇陵", budget: 70, time: "3-4小时" },
+                { name: "总统府", description: "南京的历史建筑", budget: 40, time: "2-3小时" },
+                { name: "玄武湖", description: "南京的城市湖泊", budget: 0, time: "2-3小时" }
+            ]
+        };
         let checklists = JSON.parse(localStorage.getItem('travelChecklists')) || {
             luggage: [
                 { id: 1, text: "护照和签证", completed: false },
@@ -683,13 +764,17 @@
             updateTripSelector();
             initializeSlider();
             
-            // 初始化管理器
-            if (typeof DataManager !== 'undefined' && typeof ModalManager !== 'undefined') {
-                const dataManager = new DataManager();
-                const modalManager = new ModalManager();
-                weatherManager = new WeatherManager(dataManager, modalManager);
-                documentManager = new DocumentManager(dataManager, modalManager);
-                memoryManager = new MemoryManager(dataManager, modalManager);
+            // 初始化memoryManager
+            memoryManager = new MemoryManager(window.storageManager, window.modalManager);
+            
+            // 渲染照片画廊
+            memoryManager.renderMemoriesGallery();
+            memoryManager.updatePhotoStats();
+            
+            // 为预算输入添加事件监听器
+            const budgetInput = document.getElementById('tripBudget');
+            if (budgetInput) {
+                budgetInput.addEventListener('input', checkAndShowRecommendations);
             }
         }
 
@@ -924,7 +1009,82 @@
                 } else {
                     destinationInput.value = citySelect.value;
                 }
+                
+                // 检查是否输入了预算，如果输入了则显示推荐地点
+                checkAndShowRecommendations();
             }
+        }
+        
+        // 检查并显示推荐地点
+        function checkAndShowRecommendations() {
+            const destination = document.getElementById('tripDestination').value;
+            const budget = parseFloat(document.getElementById('tripBudget').value);
+            
+            if (destination && !isNaN(budget) && budget > 0) {
+                showRecommendedPlaces(destination, budget);
+            }
+        }
+        
+        // 显示推荐地点
+        function showRecommendedPlaces(destination, budget) {
+            // 找到对应的城市推荐地点
+            let city = destination;
+            if (city.includes('市')) {
+                city = city.replace('市', '');
+            }
+            
+            const places = recommendedPlaces[city] || [];
+            
+            if (places.length === 0) {
+                return;
+            }
+            
+            // 根据预算筛选推荐地点
+            const filteredPlaces = places.filter(place => place.budget <= budget);
+            
+            if (filteredPlaces.length === 0) {
+                return;
+            }
+            
+            // 生成推荐地点HTML
+            const placesHTML = filteredPlaces.map(place => `
+                <div class="recommended-place">
+                    <h4>${place.name}</h4>
+                    <p class="place-description">${place.description}</p>
+                    <div class="place-info">
+                        <span class="place-budget">💰 ¥${place.budget}</span>
+                        <span class="place-time">⏱️ ${place.time}</span>
+                    </div>
+                </div>
+            `).join('');
+            
+            // 创建推荐地点容器
+            let recommendationsContainer = document.getElementById('recommendationsContainer');
+            if (!recommendationsContainer) {
+                recommendationsContainer = document.createElement('div');
+                recommendationsContainer.id = 'recommendationsContainer';
+                recommendationsContainer.className = 'recommendations-container';
+                
+                // 找到合适的位置插入容器
+                const tripModal = document.getElementById('tripModal');
+                if (tripModal) {
+                    const form = tripModal.querySelector('form');
+                    if (form) {
+                        form.appendChild(recommendationsContainer);
+                    }
+                }
+            }
+            
+            // 显示推荐地点
+            recommendationsContainer.innerHTML = `
+                <div class="recommended-places">
+                    <h3>推荐游玩地点</h3>
+                    <p>根据您的目的地和预算，我们为您推荐以下游玩地点：</p>
+                    <div class="places-list">
+                        ${placesHTML}
+                    </div>
+                </div>
+            `;
         }
 
         function editTrip(tripId) {
@@ -1461,6 +1621,47 @@
                 closeTripModal();
             }
         }
+
+        // 初始化模块
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化管理器
+            if (typeof storageManager !== 'undefined' && typeof modalManager !== 'undefined') {
+                // 初始化天气管理器
+                if (typeof WeatherManager !== 'undefined') {
+                    window.weatherManager = new WeatherManager(storageManager, modalManager);
+                }
+                
+                // 初始化证件管理器
+                if (typeof DocumentManager !== 'undefined') {
+                    window.documentManager = new DocumentManager(storageManager, modalManager);
+                    // 渲染证件列表
+                    if (typeof documentManager.renderDocumentsList === 'function') {
+                        documentManager.renderDocumentsList();
+                    }
+                    // 检查到期提醒
+                    if (typeof documentManager.checkExpiryReminders === 'function') {
+                        documentManager.checkExpiryReminders();
+                    }
+                }
+                
+                // 初始化回忆管理器
+                if (typeof MemoryManager !== 'undefined') {
+                    window.memoryManager = new MemoryManager(storageManager, modalManager);
+                    // 渲染回忆列表
+                    if (typeof memoryManager.renderMemoriesList === 'function') {
+                        memoryManager.renderMemoriesList();
+                    }
+                    // 渲染照片库
+                    if (typeof memoryManager.renderMemoriesGallery === 'function') {
+                        memoryManager.renderMemoriesGallery();
+                    }
+                    // 更新统计信息
+                    if (typeof memoryManager.updatePhotoStats === 'function') {
+                        memoryManager.updatePhotoStats();
+                    }
+                }
+            }
+        });
     </script>
 </body>
 </html>
